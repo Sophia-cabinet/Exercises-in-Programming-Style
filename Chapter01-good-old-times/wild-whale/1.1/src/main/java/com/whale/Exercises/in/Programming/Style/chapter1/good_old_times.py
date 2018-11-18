@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
 import sys, os, string
@@ -35,21 +35,15 @@ data = []
 f = open('../stop_words.txt')
 data = [f.read(1024).split(',')] # data[0]에는 의미 없는 단어가 있다
 f.close()
-print len(data)
-print type(data)
-print data
 
 data.append([])     # data[1]은 (최대 80자인) 줄
 data.append(None)   # data[2]는 단어의 시작 문자 색인
-data.append(0)      # data[3]은 문자에 대한 색인이며 i = 0 
+data.append(0)      # data[3]은 문자에 대한 색인이며 i = 0
 data.append(False)  # data[4]는 단어를 찾았는지 여부를 나타내는 플래그
 data.append('')     # data[5]는 해당 단어
-data.append('')     # data[6]은 단어, NNNN 
-data.append(0)      # data[7]은 빈도 
+data.append('')     # data[6]은 단어, NNNN
+data.append(0)      # data[7]은 빈도
 
-print len(data)
-for d in data:
-    print d
 # 보조 기억 장치를 연다
 word_freqs = touchopen('word_freqs', 'rb+')
 # 입력 파일을 연다
@@ -57,9 +51,9 @@ f = open(sys.argv[1])
 # 입력 파일 내의 각 줄을 순회
 while True:
     data[1] = [f.readline()]
-    if data[1] == ['']: # 입력 파일 끝 
+    if data[1] == ['']: # 입력 파일 끝
         break;
-    if data[1][0][len(data[1][0])-1] != '\n':   # \n으로 끝나지 않으면 
+    if data[1][0][len(data[1][0])-1] != '\n':   # \n으로 끝나지 않으면
         data[1][0] = data[1][0] + '\n'          # \n을 추가한다.
     data[2] = None
     data[3] = 0
@@ -129,10 +123,10 @@ while True:
 for tf in data[0:25]:       # 기호 tf를 제거하는 것은 연습 문제로 남긴다
     if len(tf) == 2:
         #print( tf[0], ' - ', tf[1] )
-        print tf[0], ' - ', tf[1] 
+        print tf[0], ' - ', tf[1]
 
 # 모두 마쳤다
 word_freqs.close()
 
-                        
+
 
