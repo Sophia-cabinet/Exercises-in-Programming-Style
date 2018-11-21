@@ -7,9 +7,9 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class GoodOldTimes {
+public class GoodOldTimesMigrateVer {
     public static void main(String[] args) {
-        GoodOldTimes goodOldTimes = new GoodOldTimes();
+        GoodOldTimesMigrateVer goodOldTimes = new GoodOldTimesMigrateVer();
         try {
             goodOldTimes.start(args[0]);
         } catch (IOException e) {
@@ -46,7 +46,7 @@ public class GoodOldTimes {
         data[6] = "";               // data[6]은 단어, NNNN
         data[7] = 0;                // data[7]은 빈도
 
-        String wordFreqsPath = "/Users/loading/Develop/study/Exercises-in-Programming-Style/Chapter01-good-old-times/word_freqs";
+        String wordFreqsPath = "../../../word_freqs";
         RandomAccessFile wordFreqs = touchOpen(wordFreqsPath, "rw");
 
         for (String line : FileUtils.readLines(new File(filePath), "UTF-8")) {
@@ -90,7 +90,6 @@ public class GoodOldTimes {
                                 }
                             }
                             if (!(boolean)data[4]) {
-//                              word_freqs.seek(0, 1)   # 윈도우에서는 필요하다
                                 wordFreqs.write(String.format("%20s,%04d\n", (String)data[5], 1).getBytes("UTF-8"));
                             } else {
                                 wordFreqs.seek(wordFreqs.getFilePointer()-26);   // 윈도우에서는 필요하다
@@ -123,10 +122,14 @@ public class GoodOldTimes {
             }
             data[25] = ((String) data[25]).trim();
             data[26] = Integer.parseInt(((String)data[25]).split(",")[1]);   // 정수로 읽는다.
-            data[25] = ((String)data[25]).split(",")[0];                     // 단어
+            data[25] = ((String)data[25]).split(",")[0].trim();                     // 단어
             // 이 단어가 메모리에 있는 단어들보다 횟수가 더 많은지 확인한다.
             for (int i=0 ; i<25; i++) {
-                if (data[i] == null || Integer.parseInt(((String)data[i]).split(",")[1]) < (int)data[26]) {
+                if (data[i] == null || (Integer.parseInt(((String)data[i]).split(",")[1])<(int)data[26])) {
+                    // python insert method에서 value 뒤로 미는 효과
+                    for (int j=24 ; j>i; j--) {
+                        data[j] = data[j-1];
+                    }
                     data[i] = (String)data[25] + "," + (int)data[26];
                     data[26] = null;
                     break;
@@ -142,5 +145,4 @@ public class GoodOldTimes {
             }
         }
     }
-
 }
