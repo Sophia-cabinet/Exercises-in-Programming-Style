@@ -1,4 +1,4 @@
-package com.whale.Exercises.in.Programming.Style.chapter1;
+package com.whale.Exercises.in.Programming.Style.chapter1.v1;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
