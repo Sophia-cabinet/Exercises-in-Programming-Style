@@ -32,7 +32,7 @@ data = []
 # - 단어를 식별하고 파일에서 해당하는 횟수를 증가시킨다
 
 # 의미 없는 단어 목록을 읽어 들인다.
-f = open('../stop_words.txt', encoding='utf-8')
+f = open('../../stop_words.txt', encoding='utf-8')
 data = [f.read(1024).split(',')]  # data[0]에는 의미 없는 단어가 있다
 f.close()
 
@@ -45,9 +45,9 @@ data.append('')     # data[6]은 단어, NNNN
 data.append(0)      # data[7]은 빈도 
 
 # 보조 기억 장치를 연다
-word_freqs = touchopen('word_freqs', 'r+') ## TODO:: 만약 br+로 설정해두고 한다면?
+word_freqs = touchopen('../word_freqs', 'r+') ## TODO:: 만약 br+로 설정해두고 한다면?
 # 입력 파일을 연다
-f = open('../test_top1000.txt', encoding='utf-8')
+f = open('../../test_top1000.txt', encoding='utf-8-sig')
 # 입력 파일 내의 각 줄을 순회
 while True:
     data[1] = [f.readline()]
