@@ -239,3 +239,10 @@ pip-selfcheck.json
 
 # End of https://www.gitignore.io/api/java,python,intellij
 uiDesigner.xml
+
+# Ignorable Files from wild-whale
+.gradle/
+.idea/
+gradle/
+gradlew
+gradlew.bat

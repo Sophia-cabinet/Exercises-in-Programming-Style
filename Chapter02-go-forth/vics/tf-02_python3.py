@@ -1,19 +1,35 @@
-import sys, re, operator, string
+import re, operator, string
 
-#
-# 가장 중요한 데이터 스택
-#
-stack = []
 
-#
-# 힙. 이름을 데이터에 매핑한다(즉, 변수)
-#
-heap = {}
+def run(content_path, stopwords_path):
+    # 가장 중요한 데이터 스택
+    stack = []
 
-#
-# 프로그램의 새 '단어들'(프로시저)
-#
-def read_file():
+    # 힙. 이름을 데이터에 매핑한다(즉, 변수)
+    heap = {}
+
+    # 주 함수
+    stack.append(content_path)
+    stack = __read_file(stack)
+    stack = __filter_chars(stack)
+    stack = __scan(stack)
+    stack, heap = __remove_stop_words(stack, heap, stopwords_path)
+    stack, heap = __frequencies(stack, heap)
+    stack = __sort(stack)
+
+    stack.append(0)
+    # 스택의 길이를 1을 기준으로 검사한다. 처리를 마친 후
+    # 남아 있을 항목 하나는 마지막 단어가 될 것이기 때문이다.
+    while stack[-1] < 25 and len(stack) > 1:
+        heap['i'] = stack.pop()
+        (w, f) = stack.pop()
+        print(w, ' - ', f)
+        stack.append(heap['i'])
+        stack.append(1)
+        stack.append(stack.pop() + stack.pop())
+
+
+def __read_file(stack):
     """
         takes a path to a file on the stack and places the entier
         contents of the file back on the stack.
@@ -23,7 +39,10 @@ def read_file():
     stack.append([f.read()])
     f.close()
 
-def filter_chars():
+    return stack
+
+
+def __filter_chars(stack):
     """
         Takes data on the stack and places back a copy whith all
         nonallphanumeric chars replaced by white space.
@@ -35,7 +54,10 @@ def filter_chars():
     # 그 결과를 스택에 넣는다.
     stack.append([stack.pop().sub(' ', stack.pop()[0]).lower()])
 
-def scan():
+    return stack
+
+
+def __scan(stack):
     """
         Takes a string on the stack and scans for words, placing
         the list o words back on the stack
@@ -44,11 +66,14 @@ def scan():
     # 빠르고 짧게 처리하기 위해 사용한다. 연습문제로 남겨둔다.
     stack.extend(stack.pop()[0].split())
 
-def remove_stop_words():
+    return stack
+
+
+def __remove_stop_words(stack, heap, stopwords_path):
     """
         Takes a list of words on the stack and removes stop words.
     """
-    f = open('../../stop_words.txt', encoding='utf-8')
+    f = open(stopwords_path, encoding='utf-8')
     stack.append(f.read().split(','))
     f.close()
     # 한 글자로 된 단어를 추가한다.
@@ -59,14 +84,17 @@ def remove_stop_words():
     heap['words'] = []
     while len(stack) > 0:
         if stack[-1] in heap['stop_words']:
-            stack.pop() # 꺼낸 후 버린다.
+            stack.pop()  # 꺼낸 후 버린다.
         else:
-            heap['words'].append(stack.pop()) # 꺼낸 후 저장한다.
-    stack.extend(heap['words']) # 단어를 스택에 적재한다.
-    del heap['stop_words']; # 불필요하다.
-    del heap['words'];      # 불필요하다.
+            heap['words'].append(stack.pop())  # 꺼낸 후 저장한다.
+    stack.extend(heap['words'])  # 단어를 스택에 적재한다.
+    del heap['stop_words']  # 불필요하다.
+    del heap['words']      # 불필요하다.
 
-def frequencies():
+    return stack, heap
+
+
+def __frequencies(stack, heap):
     """
         Takes a list of words and returns a dictionary associating
         words with frequencies of occurrence.
@@ -90,28 +118,17 @@ def frequencies():
     stack.append(heap['word_freqs'])
     del heap['word_freqs']      # 이 변수는 더 이상 필요치 않다.
 
-def sort():
+    return stack, heap
+
+
+def __sort(stack):
     # 형식에 속하지 않는다. 연습문제로 남겨 둔다.
     stack.extend(sorted(stack.pop().items(), key=operator.itemgetter(1)))
 
-# 주 함수
-#
-stack.append('../../test_top1000.txt')
-read_file()
-filter_chars()
-scan()
-remove_stop_words()
-frequencies()
-sort()
+    return stack
 
-stack.append(0)
-# 스택의 길이를 1을 기준으로 검사한다. 처리를 마친 후
-# 남아 있을 항목 하나는 마지막 단어가 될 것이기 때문이다.
-while stack[-1] < 25 and len(stack) > 1:
-    heap['i'] = stack.pop()
-    (w, f) = stack.pop()
-    print(w, ' - ', f)
-    stack.append(heap['i'])
-    stack.append(1)
-    stack.append(stack.pop() + stack.pop())
 
+if __name__ == '__main__':
+    content_path = '../../test_top1000.txt'
+    stopwords_path = '../../stop_words.txt'
+    run(content_path, stopwords_path)
