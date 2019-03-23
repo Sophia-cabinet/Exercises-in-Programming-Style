@@ -246,3 +246,4 @@ uiDesigner.xml
 gradle/
 gradlew
 gradlew.bat
+settings.gradle
